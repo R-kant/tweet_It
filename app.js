@@ -6,6 +6,8 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const expressSession = require("express-session");
 const hbs = require("hbs");
 const User = require(__dirname + "/models/user");
+const seedDB = require(__dirname + "/seed");
+seedDB();
 mongoose.connect("mongodb://localhost/tweet_it", {
   useNewUrlParser: true,
   useUnifiedTopology: true,

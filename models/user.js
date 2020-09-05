@@ -11,6 +11,12 @@ let userSchema = new mongoose.Schema({
     required: true,
   },
   password: String,
+  tweets: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tweet",
+    },
+  ],
 });
 userSchema.plugin(passporLocalMongoose);
 module.exports = mongoose.model("User", userSchema);
