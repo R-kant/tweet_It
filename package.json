@@ -1,0 +1,22 @@
+{
+  "name": "tweet_it",
+  "version": "1.0.0",
+  "description": "Social media website",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/R-kant/tweet_It.git"
+  },
+  "author": "Ravikant Mishra",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/R-kant/tweet_It/issues"
+  },
+  "homepage": "https://github.com/R-kant/tweet_It#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
