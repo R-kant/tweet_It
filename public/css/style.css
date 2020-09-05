@@ -1,0 +1,15 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: #333;
+}
+
+@media (max-width: 767.98px) {
+  .mx-w-100 {
+    width: 100% !important;
+  }
+}
