@@ -1,9 +1,56 @@
 window.onload = function () {
   let likeBtns = $(".likeBtn");
   let readCommentBtns = $(".readComments");
+  let commentPostBtns = $(".commentPostBtn");
+
+  commentPostBtns.on("click", postComment);
   readCommentBtns.on("click", readComments);
 
   likeBtns.on("click", likeTweet);
+  function postComment() {
+    let tweet_id = $(this).attr("tweet_id");
+    let commentContent = $("#inputComment" + tweet_id);
+    if (commentContent.val() != "") {
+      let content = commentContent.val();
+      commentContent.val("");
+      $.ajax({
+        type: "POST",
+        url: "/" + tweet_id + "/comments/new",
+        data: {
+          comment: content,
+        },
+        success: function (user) {
+          let commentsWrapper = $("#commentsWrapper" + tweet_id);
+          commentsWrapper.prepend(
+            $(
+              `<div class=" comments_container d-flex"> 
+              <div class=" tweet_card_profile_pic d-inline-block">
+                  <img src="${user.profile_pic}" alt="Profile Picture">
+              </div>\
+              <div class="commentInfo pl-2">
+                  <div class="user_info">
+                      <span class="font-weight-bold">
+                          ${user.name}
+                      </span>
+                      <a href="/proflie/${user.username}">
+                          <span class="text-muted usernameLink">
+                              ${user.username}
+                          </span>
+                      </a>
+                  </div>
+                  <div class="user_comment">
+                      <p>
+                          ${content}
+                      </p>
+                  </div>
+              </div>
+          </div>`
+            )
+          );
+        },
+      });
+    }
+  }
   function readComments() {
     let commentBtn = $(this);
     let tweet_id = commentBtn.attr("tweet_id");
@@ -23,10 +70,13 @@ window.onload = function () {
   function likeTweet() {
     let likeBtn = $(this);
     let tweet_id = likeBtn.attr("tweet_id");
-
+    let no_of_likes = $("#no_of_likes" + tweet_id);
+    let likes = no_of_likes.text();
     if (likeBtn.hasClass("liked")) {
       likeBtn.removeClass("liked");
       likeBtn.text("Like");
+
+      no_of_likes.text(Number(likes) - 1);
       $.ajax({
         type: "GET",
         url: "/" + tweet_id + "/unlike",
@@ -39,6 +89,7 @@ window.onload = function () {
     } else {
       likeBtn.addClass("liked");
       likeBtn.text("Liked");
+      no_of_likes.text(Number(likes) + 1);
       $.ajax({
         type: "GET",
         url: "/" + tweet_id + "/like",

@@ -10,7 +10,13 @@ let tweetSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  likes: Number,
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+  ],
   comments: [
     {
       type: mongoose.Schema.Types.ObjectId,

@@ -5,6 +5,7 @@ let userSchema = new mongoose.Schema({
   profile_pic: String,
   username: {
     type: String,
+    unique: true,
     required: true,
   },
   name: String,

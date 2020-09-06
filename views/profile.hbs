@@ -2,6 +2,7 @@
 
 
 {{!-- {{#each userProfile as |person|}} --}}
+<h1>{{@root.user.username}} == {{person.username}}</h1>
 {{#ifCond @root.user.username person.username }}
 <h1>Equal</h1>
 {{else}}
@@ -36,16 +37,19 @@
         <div class="col-md-6">
             <div class="row">
                 <div class="col">
-                    <p class="lead text-center">Tweets</p>
                     <p class="text-center"><strong>{{person.tweets.length}}</strong></p>
+                    <p class="lead text-center">Tweets</p>
+                    
                 </div>
                 <div class="col">
-                    <p class="lead text-center">Followers</p>
+                    
                     <p class="text-center"><strong>{{person.followers.length}}</strong></p>
+                    <p class="lead text-center">Followers</p>
                 </div>
                 <div class="col">
-                    <p class="lead text-center">Following</p>
+                    
                     <p class="text-center"><strong>{{person.following.length}}</strong></p>
+                    <p class="lead text-center">Following</p>
                 </div>
             </div>
 
@@ -87,9 +91,14 @@
                         {{tweet.content}}
                     </p>
                     <div class="actionButtons">
+                        
+                        {{#ifSet tweet.likes @root.user._id}}
+                            <button class="btn btn-primary liked likeBtn" tweet_id="{{tweet._id}}">Liked</button>
+                        {{else}}                    
                         <button class="likeBtn btn btn-primary" tweet_id="{{tweet._id}}">Like</button>
+                        {{/ifSet}}
                         <small class="no_of_likes" class="text-muted">
-                            <span>{{tweet.likes}}</span>
+                            <span  id="no_of_likes{{tweet._id}}">{{tweet.likes.length}}</span>
                             likes
                         </small>
                         <small>
@@ -99,19 +108,19 @@
                             </a>
                         </small>
                     </div>
-                    <div class="commentsWrapper ">
+                    <div class="commentsWrapper " id="commentsWrapper{{tweet._id}}">
                         {{#each tweet.comments as |comment|}}
 
-                        <div class="comments_container d-flex">
-                            <div class="tweet_card_profile_pic d-inline-block">
-                                <img src="{{@root.user.profile_pic}}" alt="Profile Picture">
+                        <div class=" comments_container d-flex">
+                            <div class=" tweet_card_profile_pic d-inline-block">
+                                <img src="{{@root.person.profile_pic}}" alt="Profile Picture">
                             </div>
                             <div class="commentInfo pl-2">
                                 <div class="user_info">
                                     <span class="font-weight-bold">
                                         {{comment.author.name}}
                                     </span>
-                                    <a href="/proflie/{{comment.author.username}}">
+                                    <a href="/profile/{{comment.author.username}}">
                                         <span class="text-muted usernameLink">
                                             {{comment.author.username}}
                                         </span>
@@ -143,9 +152,10 @@
                                 </div>
                                 <div class="user_comment">
                                     <p>
-                                        <input type="text" class="inputComment" tweet_id="{{tweet._id}}"
+                                        <input type="text" id="inputComment{{tweet._id}}" tweet_id="{{tweet._id}}"
                                             placeholder="Write a Comment....">
-                                        <button class="btn-sm btn btn-success commentPostBtn">Post</button>
+                                        <button class="btn-sm btn btn-success commentPostBtn"
+                                            tweet_id="{{tweet._id}}">Post</button>
                                     </p>
                                 </div>
                             </div>
@@ -154,14 +164,14 @@
                     </div>
                 </div>
 
-            </div>
+            
             {{/each}}
+    </div>
+        </div>
+        <div class="col-md-3 d-none d-md-block">
+            <h1 class="display-4">Who to follow</h1>
         </div>
     </div>
-    <div class="col-md-3 d-none d-md-block">
-        <h1 class="display-4">Who to follow</h1>
-    </div>
-</div>
 </div>
 
 {{!-- {{/each}} --}}
