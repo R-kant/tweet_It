@@ -1,0 +1,168 @@
+{{>header}}
+
+
+{{!-- {{#each userProfile as |person|}} --}}
+{{#ifCond @root.user.username person.username }}
+<h1>Equal</h1>
+{{else}}
+<h1>Not equal</h1>
+{{/ifCond}}
+<div id="cover_pic_container" class="w-100">
+    <img src="{{person.cover_pic}}" alt="Cover Picture" class="w-100">
+    <div id="profile_pic_wrapper" class="d-md-none">
+        <img src="{{person.profile_pic}}" alt="Profile picture" class="rounded">
+        <p class="lead text-center">{{person.username}}</p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 d-none d-md-block">
+            <div id="wrapper">
+                <div id="profile_pic_container">
+                    <img src="{{person.profile_pic}}" alt="Profile Picture" class="rounded">
+                </div>
+            </div>
+            <div id="info">
+                <h3 class="text-center">{{person.username}}</h3>
+                <div>
+                    <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam ea quasi dolore
+                        voluptatibus?
+                        Dolorum accusamus neque modi facilis molestiae cumque omnis esse quis. Dolorum quidem debitis
+                        voluptatem tenetur, doloremque vitae.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col">
+                    <p class="lead text-center">Tweets</p>
+                    <p class="text-center"><strong>{{person.tweets.length}}</strong></p>
+                </div>
+                <div class="col">
+                    <p class="lead text-center">Followers</p>
+                    <p class="text-center"><strong>{{person.followers.length}}</strong></p>
+                </div>
+                <div class="col">
+                    <p class="lead text-center">Following</p>
+                    <p class="text-center"><strong>{{person.following.length}}</strong></p>
+                </div>
+            </div>
+
+            <div class="container" id="timeline">
+                {{#ifCond @root.user.username person.username}}
+                <div id="status">
+                    <p><span>{{person.name}}</span><span>{{person.username}}</span></p>
+                    <form action="/{{person._id}}/tweets/new" method="POST">
+                        <textarea name="tweetContent" id="statusInput" cols="30" rows="3" class="form-control mb-1"
+                            placeholder="What's on your mind?"></textarea>
+                        <button class="btn btn-primary">Tweet</button>
+                    </form>
+                </div>
+                {{/ifCond}}
+                {{#each person.tweets as |tweet|}}
+                <div class="tweetCards">
+                    <div class="tweet_heading clearfix">
+                        <div class="tweet_card_profile_pic d-inline-block">
+                            <img src="{{@root.person.profile_pic}}" alt="Profile Picture">
+                        </div>
+                        <div class="tweet_username d-inline-block">
+                            <p>
+                                <span class="font-weight-bold">{{@root.person.name}}</span>
+                                <br>
+                                <a href="/profile/{{@root.user.username}}">
+                                    <span class="text-muted usernameLink">
+                                        {{@root.person.username}}
+                                    </span>
+                                </a>
+                            </p>
+                        </div>
+                        <div class="d-inline-block float-right">
+                            <small class="text-muted">
+                                <span>{{tweet.dateTime}}</span>
+                            </small>
+                        </div>
+                    </div>
+                    <p class="tweetContent lead">
+                        {{tweet.content}}
+                    </p>
+                    <div class="actionButtons">
+                        <button class="likeBtn btn btn-primary" tweet_id="{{tweet._id}}">Like</button>
+                        <small class="no_of_likes" class="text-muted">
+                            <span>{{tweet.likes}}</span>
+                            likes
+                        </small>
+                        <small>
+                            <a href="" class="text-muted" class="readComments" tweet_id="{{tweet._id}}">
+                                <span>{{tweet.comments.length}}</span>
+                                Comments
+                            </a>
+                        </small>
+                    </div>
+                    <div class="commentsWrapper ">
+                        {{#each tweet.comments as |comment|}}
+
+                        <div class="comments_container d-flex">
+                            <div class="tweet_card_profile_pic d-inline-block">
+                                <img src="{{@root.user.profile_pic}}" alt="Profile Picture">
+                            </div>
+                            <div class="commentInfo pl-2">
+                                <div class="user_info">
+                                    <span class="font-weight-bold">
+                                        {{comment.author.name}}
+                                    </span>
+                                    <a href="/proflie/{{comment.author.username}}">
+                                        <span class="text-muted usernameLink">
+                                            {{comment.author.username}}
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="user_comment">
+                                    <p>
+                                        {{comment.content}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{/each}}
+                        <div class="comments_container d-flex">
+                            <div class="tweet_card_profile_pic d-inline-block">
+                                <img src="{{@root.user.profile_pic}}" alt="Profile Picture">
+                            </div>
+                            <div class="commentInfo pl-2">
+                                <div class="user_info">
+                                    <span class="font-weight-bold">
+                                        {{@root.user.name}}
+                                    </span>
+                                    <a href="/profile/{{@root.user.username}}">
+                                        <span class="text-muted usernameLink">
+                                            {{@root.user.username}}
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="user_comment">
+                                    <p>
+                                        <input type="text" class="inputComment" tweet_id="{{tweet._id}}"
+                                            placeholder="Write a Comment....">
+                                        <button class="btn-sm btn btn-success commentPostBtn">Post</button>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    <div class="col-md-3 d-none d-md-block">
+        <h1 class="display-4">Who to follow</h1>
+    </div>
+</div>
+</div>
+
+{{!-- {{/each}} --}}
+{{>footer}}

@@ -10,6 +10,14 @@ let tweetSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  likes: Number,
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
+  dateTime: String,
 });
 
 module.exports = mongoose.model("Tweet", tweetSchema);
