@@ -34,9 +34,35 @@ img {
   padding-top: 5px;
   margin: 5px 0;
 }
-
+#homepage {
+  background: white;
+}
+#leftSidebar {
+  background: #e9e9e9;
+  position: relative;
+}
+#leftSidebarfixed {
+  position: fixed;
+  left: 3.6%;
+  /* text-align: center; */
+}
+.homepage_tweets {
+  box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.2), 0 10px 20px 0 rgba(0, 0, 0, 0.19) !important;
+}
 .liked:hover {
   background: gray;
+}
+#status {
+  display: flex;
+  width: 80%;
+}
+#profileCardHome {
+  width: 100%;
+
+  margin: 0 auto;
+}
+#profileCardHome img {
+  height: 250px;
 }
 #info {
   padding-top: 120px;

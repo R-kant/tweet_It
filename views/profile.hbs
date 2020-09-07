@@ -101,7 +101,7 @@
                             likes
                         </small>
                         {{!-- =============== --}}
-
+                        {{#if user}}
                         <button type="button" class="btn btn-primary" data-toggle="modal"
                             data-target="#myModal{{tweet._id}}">
                             Launch demo modal
@@ -129,7 +129,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        {{/if}}
                         {{!-- ========================= --}}
                         <small>
                             <a href="" class="text-muted" class="readComments" tweet_id="{{tweet._id}}">

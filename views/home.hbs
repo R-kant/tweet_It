@@ -1,15 +1,196 @@
 {{>header}}
+
 <section id="hero">
     <div class="row">
         <div class="col-md-3 d-md-block d-none" id="leftSidebar">
-            <h1>left Sidebar</h1>
+            <div id="leftSidebarfixed">
+                <div id="profileCardHome" class="pt-2">
+                    <div id="profileCardPic">
+                        <a href="/profile/{{currentUser.username}}">
+                            <img src="{{currentUser.profile_pic}}" alt="Profile Picture " class="img-thumbnail">
+                        </a>
+                    </div>
+                    <div id="profileCardInfo">
+                        <a href="/profile/{{currentUser.username}}"
+                            class="display-4 text-center">@{{currentUser.username}}</a>
+                        <br>
+                        <span class="display-4 text-center">{{currentUser.name}}</span>
+                        <p class="lead text-muted">
+                            -an attractive bio
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6" id="homepage">
-            <h2>Homepage</h2>
+        <div class="col-md-8" id="homepage">
+            <p class="greetings display-4">Hi <span class="font-weight-bold">{{currentUser.name}}</span>,
+                <br>
+                how are you
+                doing
+                today ?</p>
+
+            <div id="status">
+                <div class="tweet_card_profile_pic ">
+                    <img src="{{currentUser.profile_pic}}" alt="Profile Picture">
+                    <p>
+                        <span class="font-weight-bold">{{currentUser.name}}</span>
+                        <br>
+                        <a href="/profile/{{currentUser.username}}">
+                            <span class="text-muted usernameLink">
+                                @{{currentUser.username}}
+                            </span>
+                        </a>
+                    </p>
+                </div>
+                <div class="tweet_username w-75 ml-3">
+
+                    <form action="/{{currentUser._id}}/tweets/new" method="POST">
+                        <textarea name="tweetContent" id="statusInput" cols="30" rows="3"
+                            class=" w-100 form-control mb-1" placeholder="What's on your mind?"></textarea>
+                        <button class="btn btn-primary">Tweet</button>
+                    </form>
+                </div>
+
+            </div>
+            {{#each currentUser.following as |users|}}
+            {{#each users.tweets as |tweet|}}
+
+            <div class="tweetCards homepage_tweets mt-4 mb-4">
+                <div class="tweet_heading clearfix">
+                    <div class="tweet_card_profile_pic d-inline-block">
+                        <img src="{{tweet.author.profile_pic}}" alt="Profile Picture">
+                    </div>
+                    <div class="tweet_username d-inline-block">
+                        <p>
+                            <span class="font-weight-bold">{{tweet.author.name}}</span>
+                            <br>
+                            <a href="/profile/{{tweet.author.username}}">
+                                <span class="text-muted usernameLink">
+                                    @{{tweet.author.username}}
+                                </span>
+                            </a>
+                        </p>
+                    </div>
+                    <div class="d-inline-block float-right">
+                        <small class="text-muted">
+                            <span>{{tweet.dateTime}}</span>
+                        </small>
+                    </div>
+                </div>
+                <p class="tweetContent lead">
+                    {{tweet.content}}
+                </p>
+                <div class="actionButtons">
+
+                    {{#ifSet tweet.likes @root.currentUser._id}}
+                    <button class="btn btn-primary liked likeBtn" tweet_id="{{tweet._id}}">Liked</button>
+                    {{else}}
+                    <button class="likeBtn btn btn-primary" tweet_id="{{tweet._id}}">Like</button>
+                    {{/ifSet}}
+                    <small class="no_of_likes" class="text-muted">
+                        <span id="no_of_likes{{tweet._id}}">{{tweet.likes.length}}</span>
+                        likes
+                    </small>
+                    {{!-- =============== --}}
+                    {{#if user}}
+                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                        data-target="#myModal{{tweet._id}}">
+                        Launch demo modal
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal{{tweet._id}}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Modal title</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>{{tweet}}</p>
+                                    {{#each tweet.likes as |liked|}}
+
+                                    <p class="bg-success">{{liked.username}}</p>
+                                    {{/each}}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    {{/if}}
+                    {{!-- ========================= --}}
+                    <small>
+                        <a href="" class="text-muted" class="readComments" tweet_id="{{tweet._id}}">
+                            <span>{{tweet.comments.length}}</span>
+                            Comments
+                        </a>
+                    </small>
+                </div>
+                <div class="commentsWrapper " id="commentsWrapper{{tweet._id}}">
+                    {{#each tweet.comments as |comment|}}
+
+                    <div class=" comments_container d-flex">
+                        <div class=" tweet_card_profile_pic d-inline-block">
+                            <img src="{{comment.author.profile_pic}}" alt="Profile Picture">
+                        </div>
+                        <div class="commentInfo pl-2">
+                            <div class="user_info">
+                                <span class="font-weight-bold">
+                                    {{comment.author.name}}
+                                </span>
+                                <a href="/profile/{{comment.author.username}}">
+                                    <span class="text-muted usernameLink">
+                                        @{{comment.author.username}}
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="user_comment">
+                                <p>
+                                    {{comment.content}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{/each}}
+                    <div class="comments_container d-flex">
+                        <div class="tweet_card_profile_pic d-inline-block">
+                            <img src="{{@root.currentUser.profile_pic}}" alt="Profile Picture">
+                        </div>
+                        <div class="commentInfo pl-2">
+                            <div class="user_info">
+                                <span class="font-weight-bold">
+                                    {{@root.currentUser.name}}
+                                </span>
+                                <a href="/profile/{{@root.user.username}}">
+                                    <span class="text-muted usernameLink">
+                                        @{{@root.currentUser.username}}
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="user_comment">
+                                <p>
+                                    <input type="text" id="inputComment{{tweet._id}}" tweet_id="{{tweet._id}}"
+                                        placeholder="Write a Comment....">
+                                    <button class="btn-sm btn btn-success commentPostBtn"
+                                        tweet_id="{{tweet._id}}">Post</button>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            {{/each}}
+            {{/each}}
         </div>
-        <div class="col-md-3 d-none d-md-block" id="rightSidebar">
-            <h1>Right Sidebar</h1>
-        </div>
+
     </div>
+
+
 </section>
 {{>footer}}

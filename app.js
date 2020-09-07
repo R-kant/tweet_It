@@ -67,8 +67,37 @@ function isLoggedIn(req, res, next) {
 // Routes
 //=============
 
-app.get("/", (req, res) => {
-  res.render("home");
+app.get("/", isLoggedIn, (req, res) => {
+  User.findOne({ username: req.user.username })
+    .populate({
+      path: "following",
+      model: "User",
+      populate: {
+        path: "tweets",
+        model: "Tweet",
+        populate: [
+          {
+            path: "author",
+            model: "User",
+          },
+          {
+            path: "comments",
+            model: "Comment",
+            populate: {
+              path: "author",
+              model: "User",
+            },
+          },
+          {
+            path: "likes",
+            model: "User",
+          },
+        ],
+      },
+    })
+    .exec((err, currentUser) => {
+      res.render("home", { currentUser });
+    });
 });
 app.get("/explore", isLoggedIn, (req, res) => {
   res.render("explore");
