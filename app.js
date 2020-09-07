@@ -145,7 +145,36 @@ app.get("/profile/:username", isLoggedIn, (req, res) => {
       res.render("profile", { person: userProfile });
     });
 });
-app.get("/:userId/followers/new", isLoggedIn, (req, res) => {
+app.get("/:userId/followers/unfollow", isLoggedIn, (req, res) => {
+  User.findById(req.params.userId, (err, user) => {
+    if (err) {
+      console.log(err);
+      res.send("User not found");
+    } else {
+      User.findOne({ username: req.user.username }, (err, loggedInUser) => {
+        if (err) {
+          console.log(err);
+          res.send("Can't unfollow user.");
+        } else {
+          for (let i = 0; i < loggedInUser.following.length; i++) {
+            if (user._id.equals(loggedInUser.following[i])) {
+              loggedInUser.following.splice(i, 1);
+            }
+          }
+          for (let i = 0; i < user.followers.length; i++) {
+            if (loggedInUser._id.equals(user.followers[i])) {
+              user.followers.splice(i, 1);
+            }
+          }
+          loggedInUser.save();
+          user.save();
+          res.send("Unfollowed " + user.username);
+        }
+      });
+    }
+  });
+});
+app.get("/:userId/followers/follow", isLoggedIn, (req, res) => {
   User.findById(req.params.userId, (err, user) => {
     if (err) {
       console.log(err);

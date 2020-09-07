@@ -204,9 +204,9 @@
             {{else}}
 
             {{#ifSet @root.user.following @root.person._id}}
-            <button class="followBtn btn btn-success" id="followBtn" user_id="{{@root.person._id}}">Following</button>
+            <button class="followBtn btn btn-success" user_id="{{@root.person._id}}">Following</button>
             {{else}}
-            <button class="followBtn btn btn-primary" id="followBtn" user_id="{{@root.person._id}}">Follow</button>
+            <button class="followBtn btn btn-primary" user_id="{{@root.person._id}}">Follow</button>
             {{/ifSet}}
 
 

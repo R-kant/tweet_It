@@ -10,17 +10,28 @@ window.onload = function () {
 
   function followUser() {
     followBtn = $(this);
-    if (followBtn.hasClass("bg-success")) {
+    let user_id = followBtn.attr("user_id");
+    if (followBtn.hasClass("btn-success")) {
       // unfollow user
-    } else {
-      // follow user
-      followBtn.addClass("bg-success");
-      followBtn.removeClass("bg-primary");
-      followBtn.text("Following");
-      let user_id = followBtn.attr("user_id");
+      followBtn.addClass("btn-primary");
+      followBtn.removeClass("btn-success");
+      followBtn.text("Follow");
       $.ajax({
         type: "GET",
-        url: "/" + user_id + "/followers/new",
+        url: "/" + user_id + "/followers/unfollow",
+        success: function (data) {
+          console.log(data);
+        },
+      });
+    } else {
+      // follow user
+      followBtn.addClass("btn-success");
+      followBtn.removeClass("btn-primary");
+      followBtn.text("Following");
+
+      $.ajax({
+        type: "GET",
+        url: "/" + user_id + "/followers/follow",
         success: function (data) {
           console.log(data);
         },
