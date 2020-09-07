@@ -21,10 +21,12 @@ mongoose.connect(
 );
 
 const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "hbs");
+
 hbs.registerPartials(__dirname + "/views/partials");
 hbs.registerHelper("ifCond", function (v1, v2, options) {
   if (v1 === v2) {
@@ -48,6 +50,7 @@ hbs.registerHelper("ifSet", function (collection, id, options) {
 
   return options.inverse(this);
 });
+
 app.use(
   expressSession({
     secret: "You shouldn't read this.",
@@ -71,6 +74,7 @@ function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   }
+
   res.redirect("/login");
 }
 //=============

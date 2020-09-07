@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <title>Title</title>
+    <title>Tweet it</title>
     <script async defer src="/js/lib/jquery-3.3.1.min.js"></script>
     <script async defer src="/js/lib/popper.min.js"></script>
     <script async defer src="/js/lib/bootstrap.min.js"></script>
@@ -27,8 +27,12 @@
                 <ul class="navbar-nav ml-auto">
                     {{#if user}}
                     <li class="nav-item">
+                        <a href="/" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
                         <a href="/profile/{{user.username}}" class="nav-link">{{user.name}}</a>
                     </li>
+
                     <li class="nav-item">
                         <a href="/explore" class="nav-link">Explore</a>
                     </li>
@@ -36,6 +40,7 @@
                         <a href="/logout" class="nav-link">Log Out</a>
                     </li>
                     {{else}}
+
                     <li class="nav-item">
                         <a href="/register" class="nav-link">SignUp</a>
                     </li>

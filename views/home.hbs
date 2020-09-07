@@ -46,7 +46,8 @@
 
                     <form action="/{{currentUser._id}}/tweets/new" method="POST">
                         <textarea name="tweetContent" id="statusInput" cols="30" rows="3"
-                            class=" w-100 form-control mb-1" placeholder="What's on your mind?"></textarea>
+                            class=" w-100 form-control mb-1" maxlength="500"
+                            placeholder="What's on your mind?"></textarea>
                         <button class="btn btn-primary">Tweet</button>
                     </form>
                 </div>
