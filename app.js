@@ -11,6 +11,7 @@ const Comment = require(__dirname + "/models/comment");
 const generate_random_pics = require(__dirname + "/random_data/pics");
 const moment = require("moment");
 const { relativeTimeThreshold } = require("moment");
+const PORT = 3000 || process.env.PORT;
 // seedDB();
 mongoose.connect(
   "mongodb+srv://RaviPC:r9582153046@cluster0.7fkuk.mongodb.net/Tweet_it?retryWrites=true&w=majority",
@@ -373,6 +374,6 @@ app.get("/explore", isLoggedIn, (req, res) => {
       }
     });
 });
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log("Server started at http://localhost:3000");
 });
