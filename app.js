@@ -31,7 +31,6 @@ hbs.registerHelper("ifSet", function (collection, id, options) {
   let collectionLength = collection.length;
 
   for (let i = 0; i < collectionLength; i++) {
-    console.log(collection[i]);
     if (collection[i].equals(id)) {
       return options.fn(this);
     }
@@ -129,6 +128,8 @@ app.get("/profile/:username", isLoggedIn, (req, res) => {
       populate: {
         path: "comments",
         model: "Comment",
+        path: "likes",
+        model: "User",
         populate: {
           path: "author",
           model: "User",
@@ -144,6 +145,28 @@ app.get("/profile/:username", isLoggedIn, (req, res) => {
       res.render("profile", { person: userProfile });
     });
 });
+app.get("/:userId/followers/new", isLoggedIn, (req, res) => {
+  User.findById(req.params.userId, (err, user) => {
+    if (err) {
+      console.log(err);
+      res.send("User not found");
+    } else {
+      User.findOne({ username: req.user.username }, (err, loggedInUser) => {
+        if (err) {
+          console.log(err);
+          res.send("There was a problem following Current User");
+        } else {
+          user.followers.push(loggedInUser);
+          loggedInUser.following.push(user);
+          user.save();
+          loggedInUser.save();
+          res.send("Followed " + user.username);
+        }
+      });
+    }
+  });
+});
+
 app.post("/:userId/tweets/new", isLoggedIn, (req, res) => {
   User.findById(req.params.userId, (err, user) => {
     if (err) {

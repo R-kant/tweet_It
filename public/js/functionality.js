@@ -2,11 +2,31 @@ window.onload = function () {
   let likeBtns = $(".likeBtn");
   let readCommentBtns = $(".readComments");
   let commentPostBtns = $(".commentPostBtn");
-
+  let followBtn = $(".followBtn");
   commentPostBtns.on("click", postComment);
   readCommentBtns.on("click", readComments);
-
+  followBtn.on("click", followUser);
   likeBtns.on("click", likeTweet);
+
+  function followUser() {
+    followBtn = $(this);
+    if (followBtn.hasClass("bg-success")) {
+      // unfollow user
+    } else {
+      // follow user
+      followBtn.addClass("bg-success");
+      followBtn.removeClass("bg-primary");
+      followBtn.text("Following");
+      let user_id = followBtn.attr("user_id");
+      $.ajax({
+        type: "GET",
+        url: "/" + user_id + "/followers/new",
+        success: function (data) {
+          console.log(data);
+        },
+      });
+    }
+  }
   function postComment() {
     let tweet_id = $(this).attr("tweet_id");
     let commentContent = $("#inputComment" + tweet_id);

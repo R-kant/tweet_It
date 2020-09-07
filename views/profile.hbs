@@ -2,7 +2,6 @@
 
 
 {{!-- {{#each userProfile as |person|}} --}}
-<h1>{{@root.user.username}} == {{person.username}}</h1>
 {{#ifCond @root.user.username person.username }}
 <h1>Equal</h1>
 {{else}}
@@ -39,15 +38,15 @@
                 <div class="col">
                     <p class="text-center"><strong>{{person.tweets.length}}</strong></p>
                     <p class="lead text-center">Tweets</p>
-                    
+
                 </div>
                 <div class="col">
-                    
+
                     <p class="text-center"><strong>{{person.followers.length}}</strong></p>
                     <p class="lead text-center">Followers</p>
                 </div>
                 <div class="col">
-                    
+
                     <p class="text-center"><strong>{{person.following.length}}</strong></p>
                     <p class="lead text-center">Following</p>
                 </div>
@@ -91,16 +90,47 @@
                         {{tweet.content}}
                     </p>
                     <div class="actionButtons">
-                        
+
                         {{#ifSet tweet.likes @root.user._id}}
-                            <button class="btn btn-primary liked likeBtn" tweet_id="{{tweet._id}}">Liked</button>
-                        {{else}}                    
+                        <button class="btn btn-primary liked likeBtn" tweet_id="{{tweet._id}}">Liked</button>
+                        {{else}}
                         <button class="likeBtn btn btn-primary" tweet_id="{{tweet._id}}">Like</button>
                         {{/ifSet}}
                         <small class="no_of_likes" class="text-muted">
-                            <span  id="no_of_likes{{tweet._id}}">{{tweet.likes.length}}</span>
+                            <span id="no_of_likes{{tweet._id}}">{{tweet.likes.length}}</span>
                             likes
                         </small>
+                        {{!-- =============== --}}
+
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#myModal{{tweet._id}}">
+                            Launch demo modal
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal{{tweet._id}}" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Modal title</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>{{tweet}}</p>
+                                        {{#each tweet.likes as |liked|}}
+
+                                        <p class="bg-success">{{liked.username}}</p>
+                                        {{/each}}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        {{!-- ========================= --}}
                         <small>
                             <a href="" class="text-muted" class="readComments" tweet_id="{{tweet._id}}">
                                 <span>{{tweet.comments.length}}</span>
@@ -164,11 +194,23 @@
                     </div>
                 </div>
 
-            
-            {{/each}}
-    </div>
+
+                {{/each}}
+            </div>
         </div>
         <div class="col-md-3 d-none d-md-block">
+            {{#ifCond @root.user.username @root.person.username}}
+            {{!-- pass --}}
+            {{else}}
+
+            {{#ifSet @root.user.following @root.person._id}}
+            <button class="followBtn btn btn-success" id="followBtn" user_id="{{@root.person._id}}">Following</button>
+            {{else}}
+            <button class="followBtn btn btn-primary" id="followBtn" user_id="{{@root.person._id}}">Follow</button>
+            {{/ifSet}}
+
+
+            {{/ifCond}}
             <h1 class="display-4">Who to follow</h1>
         </div>
     </div>
