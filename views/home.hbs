@@ -87,16 +87,13 @@
                     {{else}}
                     <button class="likeBtn btn btn-primary" tweet_id="{{tweet._id}}">Like</button>
                     {{/ifSet}}
-                    <small class="no_of_likes" class="text-muted">
+                    <small class="no_of_likes btn modalShow" class="text-muted" data-toggle="modal"
+                        data-target="#myModal{{tweet._id}}">
                         <span id="no_of_likes{{tweet._id}}">{{tweet.likes.length}}</span>
                         likes
                     </small>
                     {{!-- =============== --}}
-                    {{#if user}}
-                    <button type="button" class="btn btn-primary" data-toggle="modal"
-                        data-target="#myModal{{tweet._id}}">
-                        Launch demo modal
-                    </button>
+                    {{!-- {{#if user}} --}}
 
                     <!-- Modal -->
                     <div class="modal fade" id="myModal{{tweet._id}}" tabindex="-1" role="dialog"
@@ -104,26 +101,35 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Modal title</h5>
+                                    <h5 class="modal-title">Users who liked this post</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <p>{{tweet}}</p>
+
                                     {{#each tweet.likes as |liked|}}
 
-                                    <p class="bg-success">{{liked.username}}</p>
+                                    <div class="modalInnerContainer mt-2">
+                                        <div class="modalInnerProfilePic">
+                                            <img src="{{liked.profile_pic}}" alt="profile_pic">
+                                        </div>
+                                        <div class="modalInnerInfo">
+                                            <span class="font-weight-bold">{{liked.name}}</span>
+                                            <br>
+                                            <a href="/profile/{{liked.username}}"><span>@{{liked.username}}</span></a>
+                                        </div>
+                                    </div>
                                     {{/each}}
                                 </div>
 
                             </div>
                         </div>
                     </div>
-                    {{/if}}
+                    {{!-- {{/if}} --}}
                     {{!-- ========================= --}}
                     <small>
-                        <a href="" class="text-muted" class="readComments" tweet_id="{{tweet._id}}">
+                        <a class="text-muted btn" class="readComments" tweet_id="{{tweet._id}}">
                             <span>{{tweet.comments.length}}</span>
                             Comments
                         </a>

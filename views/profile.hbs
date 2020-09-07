@@ -1,70 +1,160 @@
 {{>header}}
 
-
-{{!-- {{#each userProfile as |person|}} --}}
-{{#ifCond @root.user.username person.username }}
-<h1>Equal</h1>
-{{else}}
-<h1>Not equal</h1>
-{{/ifCond}}
 <div id="cover_pic_container" class="w-100">
     <img src="{{person.cover_pic}}" alt="Cover Picture" class="w-100">
     <div id="profile_pic_wrapper" class="d-md-none">
         <img src="{{person.profile_pic}}" alt="Profile picture" class="rounded">
-        <p class="lead text-center">{{person.username}}</p>
+        <p class="lead text-center">@{{person.username}}</p>
     </div>
 </div>
 
 <div class="container">
     <div class="row">
-        <div class="col-md-3 d-none d-md-block">
+        <div class="col-md-3 d-none d-md-block" id="sidebarWrapper">
             <div id="wrapper">
-                <div id="profile_pic_container">
-                    <img src="{{person.profile_pic}}" alt="Profile Picture" class="rounded">
-                </div>
-            </div>
-            <div id="info">
-                <h3 class="text-center">{{person.username}}</h3>
-                <div>
-                    <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam ea quasi dolore
-                        voluptatibus?
-                        Dolorum accusamus neque modi facilis molestiae cumque omnis esse quis. Dolorum quidem debitis
-                        voluptatem tenetur, doloremque vitae.</p>
+                <div id="profilepageSidebar">
+                    <div id="profile_pic_container">
+                        <img src="{{person.profile_pic}}" alt="Profile Picture" class="rounded">
+                    </div>
+
+                    <div id="info">
+                        <h3 class="text-center">@{{person.username}}</h3>
+                        <h3 class="text-center">{{person.name}}</h3>
+                        <div>
+                            <p class="lead text-muted">
+                                Write something which describes you......
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="row">
-                <div class="col">
-                    <p class="text-center"><strong>{{person.tweets.length}}</strong></p>
-                    <p class="lead text-center">Tweets</p>
+            <div class="row pt-2">
+                <div class="col text-center">
+                    <span class="text-center"><strong>{{person.tweets.length}}</strong></span>
+                    <br>
+                    <span class="lead text-center">Tweets</span>
 
                 </div>
-                <div class="col">
+                <div class="col text-center">
 
-                    <p class="text-center"><strong>{{person.followers.length}}</strong></p>
-                    <p class="lead text-center">Followers</p>
+                    <span class="text-center"><strong>{{person.followers.length}}</strong></span>
+
+                    <br>
+                    <span class="lead text-center modalShow" data-toggle='modal'
+                        data-target="#myModalFollower{{person._id}}">Followers</span>
+                    {{!-- ============ --}}
+                    <div class="modal fade" id="myModalFollower{{person._id}}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Followers</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+                                    {{#each person.followers as |follower|}}
+
+                                    <div class="modalInnerContainer mt-2">
+                                        <div class="modalInnerProfilePic">
+                                            <img src="{{follower.profile_pic}}" alt="profile_pic">
+                                        </div>
+                                        <div class="modalInnerInfo">
+                                            <span class="font-weight-bold">{{follower.name}}</span>
+                                            <br>
+                                            <a
+                                                href="/profile/{{follower.username}}"><span>@{{follower.username}}</span></a>
+                                        </div>
+                                    </div>
+                                    {{/each}}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    {{!-- ======== --}}
                 </div>
-                <div class="col">
+                <div class="col text-center">
 
-                    <p class="text-center"><strong>{{person.following.length}}</strong></p>
-                    <p class="lead text-center">Following</p>
+                    <span class="text-center"><strong>{{person.following.length}}</strong></span>
+                    <br>
+                    {{!--  --}}
+                    <span class="lead text-center modalShow" data-toggle="modal"
+                        data-target="#myModalFollowing{{person._id}}">Following</span>
+                    <div class="modal fade" id="myModalFollowing{{person._id}}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Following</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+
+                                    {{#each person.following as |follows|}}
+                                    {{!--  --}}
+                                    <div class="modalInnerContainer mt-2">
+                                        <div class="modalInnerProfilePic">
+                                            <img src="{{follows.profile_pic}}" alt="profile_pic">
+                                        </div>
+                                        <div class="modalInnerInfo">
+                                            <span class="font-weight-bold">{{follows.name}}</span>
+                                            <br>
+                                            <a
+                                                href="/profile/{{follows.username}}"><span>@{{follows.username}}</span></a>
+                                        </div>
+                                    </div>
+                                    {{!--  --}}
+
+                                    {{/each}}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    {{!--  --}}
+
                 </div>
             </div>
 
             <div class="container" id="timeline">
                 {{#ifCond @root.user.username person.username}}
-                <div id="status">
-                    <p><span>{{person.name}}</span><span>{{person.username}}</span></p>
-                    <form action="/{{person._id}}/tweets/new" method="POST">
-                        <textarea name="tweetContent" id="statusInput" cols="30" rows="3" class="form-control mb-1"
-                            placeholder="What's on your mind?"></textarea>
-                        <button class="btn btn-primary">Tweet</button>
-                    </form>
+
+                <div id="status" class="pt-4">
+                    <div class="tweet_card_profile_pic mr-2">
+                        <img src="{{person.profile_pic}}" alt="Profile Picture">
+                        <p>
+                            <span class="font-weight-bold">{{person.name}}</span>
+                            <br>
+                            <a href="/profile/{{person.username}}">
+                                <span class="text-muted usernameLink">
+                                    @{{person.username}}
+                                </span>
+                            </a>
+                        </p>
+                    </div>
+                    <div class="tweet_username w-75 ml-4">
+
+                        <form action="/{{person._id}}/tweets/new" method="POST">
+                            <textarea name="tweetContent" id="statusInput" cols="30" rows="3"
+                                class=" w-100 form-control mb-1" placeholder="What's on your mind?"></textarea>
+                            <button class="btn btn-primary">Tweet</button>
+                        </form>
+                    </div>
+
                 </div>
                 {{/ifCond}}
                 {{#each person.tweets as |tweet|}}
-                <div class="tweetCards">
+                <div class="tweetCards mt-4">
                     <div class="tweet_heading clearfix">
                         <div class="tweet_card_profile_pic d-inline-block">
                             <img src="{{@root.person.profile_pic}}" alt="Profile Picture">
@@ -75,7 +165,7 @@
                                 <br>
                                 <a href="/profile/{{@root.user.username}}">
                                     <span class="text-muted usernameLink">
-                                        {{@root.person.username}}
+                                        @{{@root.person.username}}
                                     </span>
                                 </a>
                             </p>
@@ -96,16 +186,13 @@
                         {{else}}
                         <button class="likeBtn btn btn-primary" tweet_id="{{tweet._id}}">Like</button>
                         {{/ifSet}}
-                        <small class="no_of_likes" class="text-muted">
+                        <small class="no_of_likes btn modalShow" class="text-muted" data-toggle="modal"
+                            data-target="#myModal{{tweet._id}}">
                             <span id="no_of_likes{{tweet._id}}">{{tweet.likes.length}}</span>
                             likes
                         </small>
                         {{!-- =============== --}}
-                        {{#if user}}
-                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                            data-target="#myModal{{tweet._id}}">
-                            Launch demo modal
-                        </button>
+
 
                         <!-- Modal -->
                         <div class="modal fade" id="myModal{{tweet._id}}" tabindex="-1" role="dialog"
@@ -113,26 +200,36 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Modal title</h5>
+                                        <h5 class="modal-title">Users who liked this post</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <p>{{tweet}}</p>
+
                                         {{#each tweet.likes as |liked|}}
 
-                                        <p class="bg-success">{{liked.username}}</p>
+                                        <div class="modalInnerContainer mt-2">
+                                            <div class="modalInnerProfilePic">
+                                                <img src="{{liked.profile_pic}}" alt="profile_pic">
+                                            </div>
+                                            <div class="modalInnerInfo">
+                                                <span class="font-weight-bold">{{liked.name}}</span>
+                                                <br>
+                                                <a
+                                                    href="/profile/{{liked.username}}"><span>@{{liked.username}}</span></a>
+                                            </div>
+                                        </div>
                                         {{/each}}
                                     </div>
 
                                 </div>
                             </div>
                         </div>
-                        {{/if}}
+
                         {{!-- ========================= --}}
                         <small>
-                            <a href="" class="text-muted" class="readComments" tweet_id="{{tweet._id}}">
+                            <a class="text-muted btn" class="readComments" tweet_id="{{tweet._id}}">
                                 <span>{{tweet.comments.length}}</span>
                                 Comments
                             </a>
@@ -143,7 +240,7 @@
 
                         <div class=" comments_container d-flex">
                             <div class=" tweet_card_profile_pic d-inline-block">
-                                <img src="{{@root.person.profile_pic}}" alt="Profile Picture">
+                                <img src="{{comment.author.profile_pic}}" alt="Profile Picture">
                             </div>
                             <div class="commentInfo pl-2">
                                 <div class="user_info">
@@ -152,7 +249,7 @@
                                     </span>
                                     <a href="/profile/{{comment.author.username}}">
                                         <span class="text-muted usernameLink">
-                                            {{comment.author.username}}
+                                            @{{comment.author.username}}
                                         </span>
                                     </a>
                                 </div>
@@ -176,7 +273,7 @@
                                     </span>
                                     <a href="/profile/{{@root.user.username}}">
                                         <span class="text-muted usernameLink">
-                                            {{@root.user.username}}
+                                            @{{@root.user.username}}
                                         </span>
                                     </a>
                                 </div>
@@ -204,14 +301,16 @@
             {{else}}
 
             {{#ifSet @root.user.following @root.person._id}}
-            <button class="followBtn btn btn-success" user_id="{{@root.person._id}}">Following</button>
+            <button class="followBtn btn btn-success mt-4" user_id="{{@root.person._id}}">Following</button>
             {{else}}
-            <button class="followBtn btn btn-primary" user_id="{{@root.person._id}}">Follow</button>
+            <button class="followBtn btn btn-primary mt-4" user_id="{{@root.person._id}}">Follow</button>
             {{/ifSet}}
 
 
             {{/ifCond}}
-            <h1 class="display-4">Who to follow</h1>
+            <h2>
+                some Follow Suggestions to be displayed here
+            </h2>
         </div>
     </div>
 </div>

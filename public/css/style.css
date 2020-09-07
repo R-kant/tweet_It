@@ -20,12 +20,10 @@ img {
 #cover_pic_container img {
   height: 50vh;
 }
-#wrapper {
-  position: relative;
-  top: -15%;
-}
+
 .liked {
-  background: gray;
+  background: green;
+  border: none;
   outline: none;
 }
 .comments_container,
@@ -41,16 +39,25 @@ img {
   background: #e9e9e9;
   position: relative;
 }
+
 #leftSidebarfixed {
   position: fixed;
   left: 3.6%;
+  height: 100vh;
   /* text-align: center; */
+}
+#leftSidebarfixed img {
+  width: 200px;
+}
+.modalShow:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 .homepage_tweets {
   box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.2), 0 10px 20px 0 rgba(0, 0, 0, 0.19) !important;
 }
 .liked:hover {
-  background: gray;
+  background: green;
 }
 #status {
   display: flex;
@@ -61,17 +68,27 @@ img {
 
   margin: 0 auto;
 }
+#wrapperExploreSidebar {
+  position: relative;
+}
+#leftSidebarExplore {
+  position: fixed;
+  left: 3.6%;
+}
+#suggestedUser {
+  display: flex;
+}
+#suggestedUser img {
+  height: 40px;
+  width: 40px;
+}
 #profileCardHome img {
   height: 250px;
 }
 #info {
-  padding-top: 120px;
+  padding-top: 40px;
 }
-#profile_pic_container {
-  position: absolute;
-  text-align: center;
-  top: -25%;
-}
+
 #profile_pic_container img,
 #info h3 {
   width: 75%;
@@ -91,6 +108,7 @@ img {
 #profile_pic_wrapper img {
   width: 36%;
 }
+
 #timeline {
   background: #e8f4f8;
   padding-bottom: 40px;
@@ -99,10 +117,41 @@ img {
   padding: 10px;
   background: white;
   margin: 10px 0;
-  box-shadow: 5px 10px #d4ebf2;
+  box-shadow: 0 8px 15px 0 #9acee0, 0 10px 20px 0 #9acee0;
 }
 .tweet_card_profile_pic {
   width: 40px;
+}
+
+#wrapper {
+  position: relative;
+  top: -10%;
+}
+#profile_pic_container img {
+  height: 200px;
+}
+#profilepageSidear {
+  position: fixed;
+
+  text-align: center;
+}
+
+.modalInnerContainer {
+  display: flex;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 8px 12px 0 rgba(0, 0, 0, 0.19) !important;
+}
+.modalInnerProfilePic img {
+  width: 50px;
+  height: 60px;
+}
+@media only screen and (max-width: 600px) {
+  #profile_pic_wrapper img {
+    width: 35% !important;
+    height: 100px !important;
+  }
+  #profile_pic_wrapper {
+    top: 40%;
+  }
 }
 @media (max-width: 767.98px) {
   .mx-w-100 {
@@ -110,10 +159,6 @@ img {
   }
   #cover_pic_container img {
     height: 50vh;
-  }
-  #profile_pic_wrapper img {
-    width: 35% !important;
-    height: auto;
   }
 }
 @media (max-width: 768px) {

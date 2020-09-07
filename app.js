@@ -10,11 +10,16 @@ const Tweet = require(__dirname + "/models/tweet");
 const Comment = require(__dirname + "/models/comment");
 const generate_random_pics = require(__dirname + "/random_data/pics");
 const moment = require("moment");
+const { relativeTimeThreshold } = require("moment");
 // seedDB();
-mongoose.connect("mongodb://localhost/tweet_it", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  "mongodb+srv://RaviPC:r9582153046@cluster0.7fkuk.mongodb.net/Tweet_it?retryWrites=true&w=majority",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,6 +31,11 @@ hbs.registerHelper("ifCond", function (v1, v2, options) {
     return options.fn(this);
   }
   return options.inverse(this);
+});
+hbs.registerHelper("times", function (n, block) {
+  var accum = "";
+  for (var i = 0; i < n; ++i) accum += block.fn(i);
+  return accum;
 });
 hbs.registerHelper("ifSet", function (collection, id, options) {
   let collectionLength = collection.length;
@@ -99,9 +109,6 @@ app.get("/", isLoggedIn, (req, res) => {
       res.render("home", { currentUser });
     });
 });
-app.get("/explore", isLoggedIn, (req, res) => {
-  res.render("explore");
-});
 
 // Auth Routes
 // to show signup form
@@ -151,20 +158,38 @@ app.get("/logout", (req, res) => {
 
 app.get("/profile/:username", isLoggedIn, (req, res) => {
   User.findOne({ username: req.params.username })
-    .populate({
-      path: "tweets",
-      model: "Tweet",
-      populate: {
-        path: "comments",
-        model: "Comment",
-        path: "likes",
-        model: "User",
-        populate: {
-          path: "author",
-          model: "User",
-        },
+    .populate([
+      {
+        path: "tweets",
+        model: "Tweet",
+        populate: [
+          {
+            path: "comments",
+            model: "Comment",
+            populate: {
+              path: "author",
+              model: "User",
+            },
+          },
+          {
+            path: "likes",
+            model: "User",
+            populate: {
+              path: "author",
+              model: "User",
+            },
+          },
+        ],
       },
-    })
+      {
+        path: "followers",
+        model: "User",
+      },
+      {
+        path: "following",
+        model: "User",
+      },
+    ])
     .exec((err, userProfile) => {
       if (err) {
         console.log(err);
@@ -303,6 +328,46 @@ app.post("/:tweetId/comments/new", isLoggedIn, (req, res) => {
       );
     }
   });
+});
+
+// ====================================
+// Infinite scrolling explore page
+app.get("/explore", isLoggedIn, (req, res) => {
+  Tweet.find({})
+    .populate([
+      {
+        path: "author",
+        model: "User",
+      },
+      {
+        path: "comments",
+        model: "Comment",
+        populate: {
+          path: "author",
+          model: "User",
+        },
+      },
+      {
+        path: "likes",
+        model: "User",
+      },
+    ])
+    .exec((err, tweets) => {
+      if (err) {
+        console.log(err);
+        res.send("Unable to fetch tweets");
+      } else {
+        tweets.reverse();
+        User.find({}, (err, users) => {
+          if (err) {
+            console.log(err);
+            res.send("err");
+          } else {
+            res.render("explore", { tweets, users });
+          }
+        }).limit(5);
+      }
+    });
 });
 app.listen(3000, () => {
   console.log("Server started at http://localhost:3000");

@@ -132,4 +132,60 @@ window.onload = function () {
       });
     }
   }
+  // ============================
+  // Infinite Scrolling
+
+  let isProcessPending = false; // for stopping multiple request simultaneously
+  let recordsPerPage = 2; // you can set as you want to get data per ajax request
+  let recordsOffset = 0; // get data from given no
+  let recordsTotal = 0; // store total number of record
+  let tweets_list = [];
+  //get first time article as page load
+
+  function loadTweets(params) {
+    if (!!params && params.action === "VIEW_MORE") {
+      recordsOffset = recordsOffset + recordsPerPage;
+    }
+    $.ajax({
+      type: "GET",
+      url: "/explore/tweets",
+      data: {
+        recordsPerPage: recordsPerPage,
+        recordsOffset: recordsOffset,
+      },
+      success: function (response) {
+        isProcessPending = false; // for making process done so new data can be fetched on scroll
+        if (!!params && params.action === "VIEW_MORE") {
+          tweets_list = tweets_list.concat(response.data.tweets_list);
+        } else {
+          if (recordsOffset === 0) {
+            tweets_list = response.data.tweets_list;
+            recordsTotal = response.data.recordsTotal;
+          }
+        }
+        console.log("Tweet list");
+        console.log(tweets_list); // form this you can append or manage html as you want
+        $("<div>").append(tweets_list);
+      },
+      error: function (xhr) {
+        //Do Something to handle error
+        isProcessPending = false; // for make process done so new data can be get on scroll
+      },
+    });
+  }
+  //on scroll new get data
+  $(window).scroll(function () {
+    let scrollPercent = Math.round(
+      ($(window).scrollTop() / ($(document).height() - $(window).height())) *
+        100
+    );
+    // get new data only if scroll bar is greater 70% of screen
+    if (scrollPercent > 70) {
+      //this condition only satisfy ony one pending ajax completed and records offset is less than  total record
+      if (isProcessPending === false && recordsOffset < recordsTotal) {
+        isProcessPending = true;
+        loadTweets({ action: "VIEW_MORE" });
+      }
+    }
+  });
 };

@@ -1,1 +1,187 @@
-<h1>This is the explore Page</h1>
+{{>header}}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 d-none d-md-block">
+            <div id="wrapperExploreSidebar">
+                <div id="leftSidebarExplore">
+                    <p class="lead pt-2">
+                        Enjoying the content?
+                    </p>
+                    <p class="text-muted">Follow some users to enjoy Tweet it!</p>
+                    <div id="suggestionBox">
+                        {{#each users as |suggestedUser|}}
+                        <div id="suggestedUser" class="mt-4">
+                            <div class="profilePic pt-1">
+                                <a href="/profile/{{suggestedUser.username}}">
+                                    <img src="{{suggestedUser.profile_pic}}" alt="Profile pic">
+                                </a>
+
+                            </div>
+                            <div id="userInfoExplore" class="d-inline-block">
+                                <span class="font-weight-bold">{{suggestedUser.name}}</span>
+                                <br>
+                                <span><a
+                                        href="/profile/{{suggestedUser.username}}">@{{suggestedUser.username}}</a></span>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div id="greetingsExplore">
+                <p class="display-4">
+                    Hi <span class="font-weight-bold">{{user.name}}</span>,
+                    looking for something interesting ?
+                </p>
+                <p class="lead">
+                    Checkout what others are doing at Tweet it!
+                </p>
+            </div>
+            <div id="tweetContainer">
+                {{#each tweets as |tweet|}}
+
+                <div class="tweetCards homepage_tweets mt-4 mb-4">
+                    <div class="tweet_heading clearfix">
+                        <div class="tweet_card_profile_pic d-inline-block">
+                            <img src="{{tweet.author.profile_pic}}" alt="Profile Picture">
+                        </div>
+                        <div class="tweet_username d-inline-block">
+                            <p>
+                                <span class="font-weight-bold">{{tweet.author.name}}</span>
+                                <br>
+                                <a href="/profile/{{tweet.author.username}}">
+                                    <span class="text-muted usernameLink">
+                                        @{{tweet.author.username}}
+                                    </span>
+                                </a>
+                            </p>
+                        </div>
+                        <div class="d-inline-block float-right">
+                            <small class="text-muted">
+                                <span>{{tweet.dateTime}}</span>
+                            </small>
+                        </div>
+                    </div>
+                    <p class="tweetContent lead">
+                        {{tweet.content}}
+                    </p>
+                    <div class="actionButtons">
+
+                        {{#ifSet tweet.likes @root.user._id}}
+                        <button class="btn btn-primary liked likeBtn" tweet_id="{{tweet._id}}">Liked</button>
+                        {{else}}
+                        <button class="likeBtn btn btn-primary" tweet_id="{{tweet._id}}">Like</button>
+                        {{/ifSet}}
+                        <small class="no_of_likes btn modalShow" class="text-muted" data-toggle="modal"
+                            data-target="#myModal{{tweet._id}}">
+                            <span id="no_of_likes{{tweet._id}}">{{tweet.likes.length}}</span>
+                            likes
+                        </small>
+                        {{!-- =============== --}}
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal{{tweet._id}}" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Users who liked this post</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        {{#each tweet.likes as |liked|}}
+
+                                        <div class="modalInnerContainer mt-2">
+                                            <div class="modalInnerProfilePic">
+                                                <img src="{{liked.profile_pic}}" alt="profile_pic">
+                                            </div>
+                                            <div class="modalInnerInfo">
+                                                <span class="font-weight-bold">{{liked.name}}</span>
+                                                <br>
+                                                <a
+                                                    href="/profile/{{liked.username}}"><span>@{{liked.username}}</span></a>
+                                            </div>
+                                        </div>
+                                        {{/each}}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        {{!-- ========================= --}}
+                        <small>
+                            <a class="text-muted btn" class="readComments" tweet_id="{{tweet._id}}">
+                                <span>{{tweet.comments.length}}</span>
+                                Comments
+                            </a>
+                        </small>
+                    </div>
+                    <div class="commentsWrapper " id="commentsWrapper{{tweet._id}}">
+                        {{#each tweet.comments as |comment|}}
+
+                        <div class=" comments_container d-flex">
+                            <div class=" tweet_card_profile_pic d-inline-block">
+                                <img src="{{comment.author.profile_pic}}" alt="Profile Picture">
+                            </div>
+                            <div class="commentInfo pl-2">
+                                <div class="user_info">
+                                    <span class="font-weight-bold">
+                                        {{comment.author.name}}
+                                    </span>
+                                    <a href="/profile/{{comment.author.username}}">
+                                        <span class="text-muted usernameLink">
+                                            @{{comment.author.username}}
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="user_comment">
+                                    <p>
+                                        {{comment.content}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{/each}}
+                        <div class="comments_container d-flex">
+                            <div class="tweet_card_profile_pic d-inline-block">
+                                <img src="{{@root.user.profile_pic}}" alt="Profile Picture">
+                            </div>
+                            <div class="commentInfo pl-2">
+                                <div class="user_info">
+                                    <span class="font-weight-bold">
+                                        {{@root.user.name}}
+                                    </span>
+                                    <a href="/profile/{{@root.user.username}}">
+                                        <span class="text-muted usernameLink">
+                                            @{{@root.user.username}}
+                                        </span>
+                                    </a>
+                                </div>
+                                <div class="user_comment">
+                                    <p>
+                                        <input type="text" id="inputComment{{tweet._id}}" tweet_id="{{tweet._id}}"
+                                            placeholder="Write a Comment....">
+                                        <button class="btn-sm btn btn-success commentPostBtn"
+                                            tweet_id="{{tweet._id}}">Post</button>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>
+{{>footer}}

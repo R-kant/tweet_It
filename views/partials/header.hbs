@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="/css/lib/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/lib/font-awesome.css">
-    <link rel="stylesheet" href="/css/style.css">
+
     <title>Title</title>
     <script async defer src="/js/lib/jquery-3.3.1.min.js"></script>
     <script async defer src="/js/lib/popper.min.js"></script>
     <script async defer src="/js/lib/bootstrap.min.js"></script>
-
+    <link rel="stylesheet" href="/css/lib/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/lib/font-awesome.css">
+    <link rel="stylesheet" href="/css/style.css">
     <script async defer src="/js/functionality.js"></script>
 </head>
 
@@ -23,11 +23,14 @@
             <button class="navbar-toggler" data-toggle='collapse' data-target='#navbarNav'>
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+            <div class="collapse navbar-collapse " id="navbarNav">
+                <ul class="navbar-nav ml-auto">
                     {{#if user}}
                     <li class="nav-item">
-                        <a href="/profile" class="nav-link">{{user.username}}</a>
+                        <a href="/profile/{{user.username}}" class="nav-link">{{user.name}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/explore" class="nav-link">Explore</a>
                     </li>
                     <li class="nav-item">
                         <a href="/logout" class="nav-link">Log Out</a>
@@ -40,9 +43,7 @@
                         <a href="/login" class="nav-link">Login</a>
                     </li>
                     {{/if}}
-                    <li class="nav-item">
-                        <a href="/explore" class="nav-link">Explore</a>
-                    </li>
+
                 </ul>
             </div>
         </div>
