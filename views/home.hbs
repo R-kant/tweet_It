@@ -53,6 +53,12 @@
                 </div>
 
             </div>
+            {{#ifCond currentUser.following.length 0}}
+            <div class="messageHome pb-4 mt-4 pt-4">
+                <p class="display-4">Hmmm! It's lonely here</p>
+                <p class="lead">Follow some users from explore section to get started</p>
+            </div>
+            {{else}}
             {{#each currentUser.following as |users|}}
             {{#each users.tweets as |tweet|}}
 
@@ -194,6 +200,7 @@
 
             {{/each}}
             {{/each}}
+            {{/ifCond}}
         </div>
 
     </div>

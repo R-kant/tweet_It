@@ -14,7 +14,7 @@ const { relativeTimeThreshold } = require("moment");
 const PORT = process.env.PORT || 3000;
 // seedDB();
 mongoose.connect(
-  "mongodb+srv://RaviPC:<password>@cluster0.7fkuk.mongodb.net/<dbname>?retryWrites=true&w=majority",
+  "mongodb+srv://RaviPC:r9582153046@cluster0.7fkuk.mongodb.net/Tweet_it?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
